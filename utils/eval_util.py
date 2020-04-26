@@ -35,26 +35,32 @@ def parse_line(line):
     if 'str' not in str(type(line)):
         line = line.decode()
     s = line.strip().split(' ')
-    assert len(s) > 8, 'Annotation error! Please check your annotation file. Make sure there is at least one target object in each image.'
+    # assert len(s) > 8, 'Annotation error! Please check your annotation file. Make sure there is at least one target object in each image.'
+    assert len(s) > 3, "Annotation error! Please check your annotation file. Make sure there is img_id, img_pth obj ..."
     line_idx = int(s[0])
     pic_path = s[1]
     img_width = int(s[2])
     img_height = int(s[3])
-    s = s[4:]
-    if len(s) % 5 != 0:
-        print(line)
-    assert len(s) % 5 == 0, 'Annotation error! Please check your annotation file. Maybe partially missing some coordinates?'
-    box_cnt = len(s) // 5
     boxes = []
     labels = []
-    for i in range(box_cnt):
-        label, x_min, y_min, x_max, y_max = int(s[i * 5]), float(s[i * 5 + 1]), float(s[i * 5 + 2]), float(
-            s[i * 5 + 3]), float(s[i * 5 + 4])
-        boxes.append([x_min, y_min, x_max, y_max])
-        labels.append(label)
+    if len(s) > 8:
+        s = s[4:]
+        if len(s) % 5 != 0:
+            print(line)
+        assert len(s) % 5 == 0, 'Annotation error! Please check your annotation file. Maybe partially missing some coordinates?'
+        box_cnt = len(s) // 5
+        for i in range(box_cnt):
+            label, x_min, y_min, x_max, y_max = int(s[i * 5]), float(s[i * 5 + 1]), float(s[i * 5 + 2]), float(
+                s[i * 5 + 3]), float(s[i * 5 + 4])
+            boxes.append([x_min, y_min, x_max, y_max])
+            labels.append(label)
+    else:
+        boxes.append([1, 1, 1, 1])
+        labels.append(cfg.class_num + 1)
     boxes = np.asarray(boxes, np.float32)
     labels = np.asarray(labels, np.int64)
     return line_idx, pic_path, boxes, labels, img_width, img_height
+
 
 gt_dict = {}  # key: img_id, value: gt object list
 def parse_gt_rec(gt_filename, target_img_size, letterbox_resize=True):
@@ -71,8 +77,9 @@ def parse_gt_rec(gt_filename, target_img_size, letterbox_resize=True):
         with open(gt_filename, 'r') as f:
             for line in f:
                 img_id, pic_path, boxes, labels, ori_width, ori_height = parse_line(line)
-
                 objects = []
+                # if labels[0] == (cfg.class_num + 1) and (boxes[0][0] == boxes[0][1]):
+                #     continue
                 for i in range(len(labels)):
                     x_min, y_min, x_max, y_max = boxes[i]
                     label = labels[i]
@@ -100,13 +107,24 @@ def parse_gt_rec(gt_filename, target_img_size, letterbox_resize=True):
                 gt_dict[img_id] = objects
     return gt_dict
 
+def draw_curve(recall, precision, label_id):
+    import matplotlib.pyplot as plt
+    import os
+    fig = plt.figure()
+    ax0 = fig.add_subplot(121, title="recall_precision")
+    ax0.plot(recall, precision, 'bo-', label='ap')
+    fig.savefig(os.path.join('./PR_curve/', '%s_PR.jpg'%cfg.names_class[label_id]))
 
 # The following two functions are modified from FAIR's Detectron repo to calculate mAP:
 # https://github.com/facebookresearch/Detectron/blob/master/detectron/datasets/voc_eval.py
-def voc_ap(rec, prec, use_07_metric=False):
+def voc_ap(rec, prec, class_id, use_07_metric=False):
     """Compute VOC AP given precision and recall. If use_07_metric is true, uses
     the VOC 07 11-point method (default:False).
     """
+    # print("last result rec is: ", rec)
+    # print("last result pre is: ", prec)
+    ap_recall = []
+    ap_precisin = []
     if use_07_metric:
         # 11 point metric
         ap = 0.
@@ -132,6 +150,11 @@ def voc_ap(rec, prec, use_07_metric=False):
 
         # and sum (\Delta recall) * prec
         ap = np.sum((mrec[i + 1] - mrec[i]) * mpre[i + 1])
+        ap_recall = mrec[i + 1]
+        ap_precisin = mpre[i + 1]
+        # print("ap_recall is: ", ap_recall)
+        # print("ap_precision is: ", ap_precisin)
+        draw_curve(ap_recall, ap_precisin, class_id)
     return ap
 
 
@@ -148,7 +171,6 @@ def voc_eval(gt_dict, val_preds, classidx, iou_thres=0.5, use_07_metric=False):
         det = [False] * len(R)
         npos += len(R)
         class_recs[img_id] = {'bbox': bbox, 'det': det}
-
     # 2. obtain pred results
     pred = [x for x in val_preds if x[-1] == classidx]
     img_ids = [x[0] for x in pred]
@@ -212,7 +234,7 @@ def voc_eval(gt_dict, val_preds, classidx, iou_thres=0.5, use_07_metric=False):
     # avoid divide by zero in case the first detection matches a difficult
     # ground truth
     prec = tp / np.maximum(tp + fp, np.finfo(np.float64).eps)
-    ap = voc_ap(rec, prec, use_07_metric)
+    ap = voc_ap(rec, prec, classidx, use_07_metric)
 
     # return rec, prec, ap
     return npos, nd, tp[-1] / float(npos), tp[-1] / float(nd), ap
@@ -325,3 +347,6 @@ def get_preds_gpu_centernet(model, id_list, name_list, number, scale_list):
                 label = j -1
                 pred_content.append([image_id, x_min, y_min, x_max, y_max, score, label])
     return pred_content
+
+
+

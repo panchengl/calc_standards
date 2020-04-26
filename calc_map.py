@@ -64,8 +64,8 @@ if __name__ =="__main__":
     # # calc mAP
     rec_total, prec_total, ap_total = AverageMeter(), AverageMeter(), AverageMeter()
     gt_dict = parse_gt_rec(cfg.val_file, cfg.img_size, cfg.letterbox_resize)
-    print("gt dict is", gt_dict)
-    print("val_preds is", val_preds)
+    # print("gt dict is", gt_dict)
+    # print("val_preds is", val_preds)
     info = ""
     for ii in range(cfg.class_num):
         npos, nd, rec, prec, ap = voc_eval(gt_dict, val_preds, ii, iou_thres=eval_threshold, use_07_metric=cfg.use_voc_07_metric)

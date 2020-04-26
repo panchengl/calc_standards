@@ -1,3 +1,12 @@
+20200426 updates:
+
+    1. add pytorch_centernet inference: https://github.com/xingyizhou/CenterNet
+
+    2. fixes some bugs when calc map, code not deal with images with no object, so, if fixed, decreased precision, unchanged recall rate
+
+    3. add code for drawimg P-R curve of different class
+
+
 The function of this project is as follows:
 
     1. Calculate the map value of different yolov3 algorithm versions

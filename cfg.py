@@ -25,11 +25,10 @@ print("class is", class_num)
 
 single_img_result_dir = "./data/result_txt/"
 transform_result_dir = "./data/result_class/"
-# dic = {'DiaoChe':0, 'TaDiao':1, 'TuiTuJi':2, 'BengChe': 3, 'WaJueJi':4, 'ChanChe':5}
 
 img_size = [512, 512]
-score_th = 0.01
-via_th = 0.01
+score_th = 0.3
+via_th = 0.3
 standard_max_iou = 0.1
 
 use_voc_07_metric = False
@@ -39,12 +38,12 @@ single_infere_img_save_flag = False
 single_infere_img_save_dir = "./"
 
 # mnn param
-mnn_model_dir = "./dianli_608_three_label_third_prune_yang.mnn"
+mnn_model_dir = "#####dianli_608_three_label_third_prune_yang.mnn"
 mnn_nms_th = 0.5
 
 # tf1_yolov3 param
-anchor_path = "./data/yolo_anchors.txt"
-tf_model_dir = "./dianli_608//best_model_Epoch_3_step_17895_mAP_0.5809_loss_3.4707_lr_0.0001"
+anchor_path = "/home/pcl/tf_work/YOLOv3_TensorFlow//data/yolo_anchors.txt"
+tf_model_dir = ".dianli_608/fiveth_kmeans_checkpoint/best_model_Epoch_3_step_17895_mAP_0.5809_loss_3.4707_lr_0.0001"
 tf_write_img_dir = './data/tf_visual_results_service/'
 tf_nms_th = 0.5
 prune_cnt = 5
