@@ -72,7 +72,7 @@ def get_obj_information(root_directory, dict_class):
         if with_danger == False:  # 图片不带有安全隐患
             image_mask.append([0, 0])  #第一个数代表图片没有安全隐患
             #filelist.append(filename) 记录不带有安全隐患的文件名
-        else:                # image with objects
+        else:                # image_shandong with objects
             image_mask.append([1, 0])  #第一个数代表图片有安全隐患
             image_with_danger_count += 1
         total_obj.append(objects)
@@ -179,7 +179,7 @@ def get_obj_information_3label(root_directory, dict_class):
         if with_danger == False:  # 图片不带有安全隐患
             image_mask.append([0, 0])  #第一个数代表图片没有安全隐患
             #filelist.append(filename) 记录不带有安全隐患的文件名
-        else:                # image with objects
+        else:                # image_shandong with objects
             image_mask.append([1, 0])  #第一个数代表图片有安全隐患
             image_with_danger_count += 1
         total_obj.append(objects)
@@ -227,7 +227,7 @@ def get_obj_information_3label(root_directory, dict_class):
         if with_danger == False:  # 图片不带有安全隐患
             image_mask.append([0, 0])  #第一个数代表图片没有安全隐患
             #filelist.append(filename) 记录不带有安全隐患的文件名
-        else:                # image with objects
+        else:                # image_shandong with objects
             image_mask.append([1, 0])  #第一个数代表图片有安全隐患
             image_with_danger_count += 1
         total_obj.append(objects)
