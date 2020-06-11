@@ -28,7 +28,7 @@ def upsample_layer(inputs, out_shape):
     new_height, new_width = out_shape[1], out_shape[2]
     # NOTE: here height is the first
     # TODO: Do we need to set `align_corners` as True?
-    # inputs = tf.image.resize_nearest_neighbor(inputs, (new_height, new_width), name='upsampled')
+    # inputs = tf.image_shandong.resize_nearest_neighbor(inputs, (new_height, new_width), name='upsampled')
     inputs = tf.image.resize_bilinear(inputs, size=[new_height, new_width], name='upsampled')
     return inputs
 

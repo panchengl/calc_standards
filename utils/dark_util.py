@@ -107,5 +107,5 @@ if __name__ == "__main__":
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
     # darknet_inference_write_results(cfg.img_dir, cfg.darknet_weights, cfg.img_size[0], cfg.names_class, cfg.score_th, cfg.darknet_via_flag, cfg.darknet_save_flag, cfg.darknet_write_img_dir, cfg.darknet_cfg_file)
     model = darknet_model_init(cfg.darknet_weights, 416, cfg.darknet_cfg_file)
-    results = darknet_inference_single_img(model, "/home/pcl/tf_work/map/data/image/val00002.jpg", 416, cfg.names_class, cfg.score_th, cfg.darknet_via_flag)
+    results = darknet_inference_single_img(model, "/home/pcl/tf_work/map/data/image_shandong/val00002.jpg", 416, cfg.names_class, cfg.score_th, cfg.darknet_via_flag)
     print(results)

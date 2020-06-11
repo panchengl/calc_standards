@@ -20,7 +20,7 @@ def inference(img_dir, model):
     results_imgs = []
     for img in os.listdir(img_dir):
         current_img = img_dir + img
-        # print('current image is', current_img)
+        # print('current image_shandong is', current_img)
         image = cv2.imread(img_dir + img)
         ret_1 = model.run(current_img)
         ret = ret_1['results']
@@ -48,14 +48,14 @@ def inference(img_dir, model):
 
 def inference_img(detector, img_dir):
     current_img = img_dir
-    # print('current image is', current_img)
+    # print('current image_shandong is', current_img)
     image = cv2.imread(current_img)
     result = detector.run(current_img)['results']
     return result
 
 def centernet_inference_single_img(detector, img_dir, via_flag=False):
     current_img = os.path.join(cfg.img_dir,img_dir)
-    # print('current image is', current_img)
+    # print('current image_shandong is', current_img)
     result = detector.run(current_img)['results']
     if via_flag:
         image = cv2.imread(current_img)
@@ -66,7 +66,7 @@ def centernet_inference_single_img(detector, img_dir, via_flag=False):
 
 def get_preds_gpu(id_list, name_list, number):
     '''
-    Given the y_pred of an input image, get the predicted bbox and label info.
+    Given the y_pred of an input image_shandong, get the predicted bbox and label info.
     return:
         pred_content: 2d list.
     '''

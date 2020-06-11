@@ -201,7 +201,7 @@ def non_max_suppression(prediction, conf_thres=0.5, nms_thres=0.4):
         # print("num pred is", len(prediction))
         # Filter out confidence scores below threshold
         image_pred = image_pred[image_pred[:, 4] >= conf_thres]
-        # If none are remaining => process next image
+        # If none are remaining => process next image_shandong
         if not image_pred.size(0):
             continue
         # Object confidence times class confidence
@@ -336,7 +336,7 @@ def rescale_boxes(boxes, current_dim, original_shape):
     # Image height and width after padding is removed
     unpad_h = current_dim - pad_y
     unpad_w = current_dim - pad_x
-    # Rescale bounding boxes to dimension of original image
+    # Rescale bounding boxes to dimension of original image_shandong
     boxes[:, 0] = ((boxes[:, 0] - pad_x // 2) / unpad_w) * orig_w
     boxes[:, 1] = ((boxes[:, 1] - pad_y // 2) / unpad_h) * orig_h
     boxes[:, 2] = ((boxes[:, 2] - pad_x // 2) / unpad_w) * orig_w

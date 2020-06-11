@@ -94,7 +94,7 @@ def draw_bbox(original_image, bboxes, classes):
 
 if __name__ == "__main__":
     anno_dir = "../data/txt_0319"
-    img_dir = "../data/image"
+    img_dir = "../data/image_shandong"
     write_img_path = '/home/pcl/tf_work/map/data/visual_results_service'
     classes = ['DiaoChe', 'TaDiao', 'TuiTuJi', 'BengChe', 'WaJueJi', 'ChanChe']
     vis_all_results_img(anno_dir, img_dir, classes, True, True)

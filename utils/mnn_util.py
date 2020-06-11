@@ -95,7 +95,7 @@ if __name__ == "__main__":
     num_classes = 3
     with open('/home/pcl/tf_work/map/data/cheliang_3label.names', 'r') as f:
         CLASSES = f.readlines()
-    img_dir = '/home/pcl/tf_work/map/data/image/'
+    img_dir = '/home/pcl/tf_work/map/data/image_shandong/'
     # model_dir = "/home/pcl/tf_work/YOLOv3_TensorFlow/dianli_608/mnn/convertor-code/v3/dianli_608_three_label_third_prune_yang.mnn"
     model_dir = "/home/pcl/tf_work/YOLOv3_TensorFlow/dianli_608/mnn/convertor-code/v3/dianli_608_three_label_third_prune_yang_quan.mnn"
     # result = inference_mnn(img_dir, model_dir, INPUTSIZE, CLASSES, conf_th=0.3)

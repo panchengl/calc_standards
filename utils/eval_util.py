@@ -35,7 +35,7 @@ def parse_line(line):
     if 'str' not in str(type(line)):
         line = line.decode()
     s = line.strip().split(' ')
-    # assert len(s) > 8, 'Annotation error! Please check your annotation file. Make sure there is at least one target object in each image.'
+    # assert len(s) > 8, 'Annotation error! Please check your annotation file. Make sure there is at least one target object in each image_shandong.'
     assert len(s) > 3, "Annotation error! Please check your annotation file. Make sure there is img_id, img_pth obj ..."
     line_idx = int(s[0])
     pic_path = s[1]
@@ -106,6 +106,49 @@ def parse_gt_rec(gt_filename, target_img_size, letterbox_resize=True):
                                         label])
                 gt_dict[img_id] = objects
     return gt_dict
+a = 0
+def parse_gt_rec_ori_scale(gt_filename, target_img_size, letterbox_resize=False):
+    '''
+    parse and re-organize the gt info.
+    return:
+        gt_dict: dict. Each key is a img_id, the value is the gt bboxes in the corresponding img.
+    '''
+
+    global gt_dict
+    global a
+    if not gt_dict:
+        new_width, new_height = target_img_size
+        with open(gt_filename, 'r') as f:
+            for line in f:
+                img_id, pic_path, boxes, labels, ori_width, ori_height = parse_line(line)
+                objects = []
+                # if labels[0] == (cfg.class_num + 1) and (boxes[0][0] == boxes[0][1]):
+                #     continue
+                a += len(labels)
+                for i in range(len(labels)):
+                    x_min, y_min, x_max, y_max = boxes[i]
+                    label = labels[i]
+
+                    if letterbox_resize:
+                        resize_ratio = min(new_width / ori_width, new_height / ori_height)
+
+                        resize_w = int(resize_ratio * ori_width)
+                        resize_h = int(resize_ratio * ori_height)
+
+                        dw = int((new_width - resize_w) / 2)
+                        dh = int((new_height - resize_h) / 2)
+
+                        objects.append([x_min * resize_ratio + dw,
+                                        y_min * resize_ratio + dh,
+                                        x_max * resize_ratio + dw,
+                                        y_max * resize_ratio + dh,
+                                        label])
+                    else:
+                        objects.append([x_min , y_min , x_max , y_max , label])
+                gt_dict[img_id] = objects
+    print("all obj sum is", a)
+    return gt_dict
+
 
 def draw_curve(recall, precision, label_id):
     import matplotlib.pyplot as plt
@@ -113,7 +156,7 @@ def draw_curve(recall, precision, label_id):
     fig = plt.figure()
     ax0 = fig.add_subplot(121, title="recall_precision")
     ax0.plot(recall, precision, 'bo-', label='ap')
-    fig.savefig(os.path.join('./PR_curve/', '%s_PR.jpg'%cfg.names_class[label_id]))
+    fig.savefig(os.path.join('./', '%s_PR.jpg'%cfg.names_class[label_id]))
 
 # The following two functions are modified from FAIR's Detectron repo to calculate mAP:
 # https://github.com/facebookresearch/Detectron/blob/master/detectron/datasets/voc_eval.py
@@ -192,7 +235,7 @@ def voc_eval(gt_dict, val_preds, classidx, iou_thres=0.5, use_07_metric=False):
     fp = np.zeros(nd)
 
     for d in range(nd):
-        # all the gt info in some image
+        # all the gt info in some image_shandong
         R = class_recs[img_ids[d]]
         bb = BB[d, :]
         ovmax = -np.Inf
@@ -242,7 +285,7 @@ def voc_eval(gt_dict, val_preds, classidx, iou_thres=0.5, use_07_metric=False):
 
 def get_preds_gpu_tf1(sess, boxes, input_data , id_list, name_list, scale_list, number,  model_dir, score_th):
     '''
-    Given the y_pred of an input image, get the predicted bbox and label info.
+    Given the y_pred of an input image_shandong, get the predicted bbox and label info.
     return:
         pred_content: 2d list.
     '''
@@ -265,23 +308,9 @@ def get_preds_gpu_tf1(sess, boxes, input_data , id_list, name_list, scale_list, 
             pred_content.append([image_id, x_min, y_min, x_max, y_max, score, label])
     return pred_content
 
-    # elif cfg.inference_type == "centernet":
-    #     print("current version only support tf1_mnn, i will finished code after sometimes")
-    #     raise NameError
-    # else:
-    #     print("current version only support tf1_mnn, i will finished code after sometimes")
-    #     raise NameError
-    # for j in range(1, cfg.class_num + 1):
-    #     for bbox in results[j]:
-    #         if bbox[4] > score_th:
-    #             x_min, y_min, x_max, y_max = (bbox[0]/float(scale_w)), (bbox[1]/float(scale_h)), bbox[2]/float(scale_w), bbox[3]/float(scale_h)
-    #             score = float(bbox[4])
-    #             label = int(j -1)
-    #             pred_content.append([image_id, x_min, y_min, x_max, y_max, score, label])
-
 def get_preds_gpu_mnn(id_list, name_list, scale_list, number,  model_dir, score_th):
     '''
-    Given the y_pred of an input image, get the predicted bbox and label info.
+    Given the y_pred of an input image_shandong, get the predicted bbox and label info.
     return:
         pred_content: 2d list.
     '''
@@ -303,7 +332,7 @@ def get_preds_gpu_mnn(id_list, name_list, scale_list, number,  model_dir, score_
 
 def get_preds_gpu_darknet(model, id_list, name_list, scale_list, number,  model_dir, score_th):
     '''
-    Given the y_pred of an input image, get the predicted bbox and label info.
+    Given the y_pred of an input image_shandong, get the predicted bbox and label info.
     return:
         pred_content: 2d list.
     '''
@@ -327,7 +356,7 @@ def get_preds_gpu_darknet(model, id_list, name_list, scale_list, number,  model_
 
 def get_preds_gpu_centernet(model, id_list, name_list, number, scale_list):
     '''
-    Given the y_pred of an input image, get the predicted bbox and label info.
+    Given the y_pred of an input image_shandong, get the predicted bbox and label info.
     return:
         pred_content: 2d list.
     '''
@@ -348,5 +377,24 @@ def get_preds_gpu_centernet(model, id_list, name_list, number, scale_list):
                 pred_content.append([image_id, x_min, y_min, x_max, y_max, score, label])
     return pred_content
 
-
-
+def get_preds_from_txt_results(id_list, name_list, number):
+    '''
+    Given the y_pred of an input image_shandong, get the predicted bbox and label info.
+    return:
+        pred_content: 2d list.
+    '''
+    image_id = int(id_list[number])
+    inference_img_name = name_list[number]
+    pred_content = []
+    from utils.static_util import get_txt_inference_single_img
+    results = get_txt_inference_single_img(cfg.txt_data_dir, cfg.names_class, cfg.score_th,
+                                           cfg.via_flag)
+    for bbox in results:
+        print("boxes is", bbox)
+        print(bbox[4])
+        if bbox[4] > cfg.score_th:
+            x_min, y_min, x_max, y_max = bbox[0] , bbox[1] , bbox[2], bbox[3]
+            score = float(bbox[4])
+            label = int(bbox[5])
+            pred_content.append([image_id, x_min, y_min, x_max, y_max, score, label])
+    return pred_content

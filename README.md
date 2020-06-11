@@ -1,3 +1,23 @@
+20200611 updates:
+
+    1. add txt calc map and product standards, one img must have one txt file, for example, a img have 2 objs, txt file just like:
+
+        class1 score xmin ymin xmax ymax
+
+        class2 scaoe xmin ymin xmax ymax
+
+    2. when u use txt method, u need do this follows:
+
+        first: create txt file, one img one txt file
+
+        second: modify the params in cfg.py ,  txt_data_dir , val_file, inference_type
+
+        last: python calc_standards
+
+    additions:
+
+        if u do not how to create txt files, u can use utils/tf_utils.py/tf1_inference_write_results()
+
 20200426 updates:
 
     1. add pytorch_centernet inference: https://github.com/xingyizhou/CenterNet
@@ -50,7 +70,7 @@ files stage:
 
 How To Use:
 
-    1. create txt datasets: put your datasets become like this:  img_id img_dir width height label x0 y0 x1 y1 label x0 y0 x1 y1  ...
+    1. create txt datasets(val file): put your datasets become like this:  img_id img_dir width height label x0 y0 x1 y1 label x0 y0 x1 y1  ...
 
     just like:
 

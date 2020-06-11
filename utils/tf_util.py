@@ -161,8 +161,9 @@ def tf1_inference_write_results(img_dirs, model_dir, INPUTSIZE, classes, conf_th
 
 
 if __name__ == "__main__":
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0'
-    # results = tf1_inference_write_results(cfg.img_dir, cfg.tf_model_dir, cfg.img_size[0], cfg.names_class, cfg.score_th, cfg.tf_via_flag, cfg.tf_save_flag, cfg.tf_write_img_dir)
-    with tf.Session() as sess:
-        boxes, input_data = tf1_model_init(sess, cfg.tf_model_dir, cfg.img_size[0])
-        results = tf1_inference_single_img(sess, boxes, input_data, img_dir="/home/pcl/tf_work/map/data/image/val00000.jpg", INPUTSIZE=cfg.img_size[0], classes=cfg.names_class, conf_th = 0.3,  via_flag = True)
+    os.environ['CUDA_VISIBLE_DEVICES'] = '5'
+    results = tf1_inference_write_results(cfg.img_dir, cfg.tf_model_dir, cfg.img_size[0], cfg.names_class, cfg.score_th, cfg.tf_via_flag, cfg.tf_save_flag, cfg.tf_write_img_dir)
+    # with tf.Session() as sess:
+    #     boxes, input_data = tf1_model_init(sess, cfg.tf_model_dir, cfg.img_size[0])
+        # results = tf1_inference_single_img(sess, boxes, input_data, img_dir="/home/pcl/tf_work/map/data/image_shandong/val00000.jpg", INPUTSIZE=cfg.img_size[0], classes=cfg.names_class, conf_th = 0.3,  via_flag = True)
+        # results = tf1_inference_write_results(cfg.img_dir, cfg.tf_model_dir, cfg.img_size[0], cfg.names_class, cfg.score_th, cfg.tf_via_flag, cfg.tf_save_flag, cfg.tf_write_img_dir)

@@ -14,16 +14,8 @@ inference_type = "centernet"# only support darknet yolov3, tf2_yolov3_mnn, keras
 # common params
 root_data_dir = "/home/pcl/tf_work/map/data"
 names_file = '/home/pcl/tf_work/map/data/cheliang_3label.names'
-# names_file = '/home/pcl/tf_work/map/data/zhongkeyaun6label.names'
-# names_file = '/home/pcl/tf_work/map/data/cheliang.names'
-# names_file = '/home/pcl/tf_work/map/data/coco.names'
 img_dir = "/home/pcl/tf_work/map/data/image_santachi/"
-# val_file = '/home/pcl/tf_work/YOLOv3_TensorFlow/data/my_data/cheliang_1000_test_r.txt'
-# val_file = '/home/pcl/tf_work/map/data/zhongkeyuan6label_val_r.txt'
-# val_file = '/home/pcl/tf_work/map/data/aa.txt'
-# val_file = '/home/pcl/tf_work/map/data/aa.txt'
 val_file = '/home/pcl/tf_work/map/data/santachi_3label_val.txt'
-# val_file = '/home/pcl/tf_work/map/data/dianli_3label_test.txt'
 
 names_class = read_class_names(names_file)
 class_dict = get_classes_standard_dict(names_class)
@@ -33,7 +25,6 @@ print("class is", class_num)
 
 single_img_result_dir = "/home/pcl/tf_work/map/data/result_ssd/"
 transform_result_dir = "/home/pcl/tf_work/map/data/result_class/"
-# dic = {'DiaoChe':0, 'TaDiao':1, 'TuiTuJi':2, 'BengChe': 3, 'WaJueJi':4, 'ChanChe':5}
 txt_data_dir = '/home/pcl/tf_work/map/data/result_yolo'
 img_size = [608, 608]
 score_th = 0.3
@@ -88,9 +79,6 @@ arch = 'dla_34'
 # arch = 'hourglass'
 heads = {'hm': class_num, 'wh': 2 , 'reg': 2}
 head_conv = 256 if 'dla' in arch else 64
-# load_model = '/home/pcl/pytorch_work/CenterNet-master/exp/ctdet/coco_dla/model_best_dla34.pth'
-# load_model ='/home/pcl/pytorch_work/CenterNet-master/exp/ctdet/coco_dla_3label_dianli/model_best_0412.pth'
-# load_model ='/home/pcl/pytorch_work/CenterNet-master/exp/ctdet/coco_hg/model_best_dla34.pth'
 load_model ='/home/pcl/tf_work/map/weights/model_best_dla34.pth'
 # load_model ='/home/pcl/tf_work/map/weights/model_best_hg.pth'
 ori_mean = np.array([0.40789654, 0.44719302, 0.47026115],
@@ -107,11 +95,3 @@ num_stacks = 2 if arch == 'hourglass' else 1
 dataset = 'dianli'
 debugger_theme = 'white'
 debug = 0
-
-
-# txt params
-
-# txt_data_dir = '/home/pcl/tf_work/map/data/result_ssd'
-# txt_data_dir = '/home/pcl/tf_work/map/data/result_ssd3x3'
-# txt_data_dir = '/home/pcl/tf_work/map/data/result_shandong'
-# txt_vai
